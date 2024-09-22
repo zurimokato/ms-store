@@ -8,7 +8,7 @@
 		<version>3.3.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.local</groupId>
+	<groupId>com.zurimokato</groupId>
 	<artifactId>ms_store</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ms_store</name>
@@ -38,7 +38,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>com.mysql</groupId>
 			<artifactId>mysql-connector-j</artifactId>
