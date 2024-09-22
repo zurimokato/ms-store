@@ -1,0 +1,14 @@
+package com.local.ms_store.infrastructure.adapter.in.rest.controller.mapper;
+
+import com.local.ms_store.domain.model.Store;
+import com.local.ms_store.infrastructure.adapter.in.rest.controller.request.StoreRequest;
+import com.local.ms_store.infrastructure.adapter.in.rest.controller.response.StoreResponse;
+import org.mapstruct.Mapper;
+
+@Mapper(componentModel = "spring")
+public interface StoreApiMapper {
+
+    StoreResponse toResponse(Store store);
+
+    Store toModel(StoreRequest storeResponse);
+}
