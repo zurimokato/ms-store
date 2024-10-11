@@ -1,17 +1,19 @@
 package com.local.ms_store.infrastructure.adapter.in.rest.controller.response;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.http.HttpStatus;
+
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Builder
-public class GenericResponse {
+@AllArgsConstructor
+@NoArgsConstructor
+public class GenericResponse implements Serializable{
     private String message;
     private String code;
-    private Object data;
+    private transient Object data;
     private PageResponse page;
     private HttpStatus httpStatus;
 

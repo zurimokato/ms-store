@@ -5,17 +5,21 @@ import com.local.ms_store.application.port.in.SaveStoreUseCase;
 import com.local.ms_store.application.port.out.StoreOutputPort;
 import com.local.ms_store.domain.model.Store;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Slf4j
 @Transactional
 @RequiredArgsConstructor
 public class StoreService implements FindStoreUseCase, SaveStoreUseCase {
     private final StoreOutputPort storeOutputPort;
     @Override
+    @Cacheable(value = "stores", key = "#id")
     public Store findStoreById(Long id) {
         return storeOutputPort.getStoreById(id);
     }
@@ -33,6 +37,7 @@ public class StoreService implements FindStoreUseCase, SaveStoreUseCase {
     @Override
     public Store updateStore(Store store) {
         Store oldStore = storeOutputPort.getStoreById(store.getId());
+        log.info("objeto to update: {}", oldStore);
         return storeOutputPort.saveStore(store);
     }
 }

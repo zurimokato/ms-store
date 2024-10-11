@@ -8,9 +8,9 @@ import com.local.ms_store.infrastructure.adapter.in.rest.controller.request.Stor
 import com.local.ms_store.infrastructure.adapter.in.rest.controller.response.GenericResponse;
 import com.local.ms_store.infrastructure.adapter.in.rest.controller.response.StoreResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,35 +22,37 @@ public class StoreController  implements StoreApiPort {
     private final SaveStoreUseCase saveStoreUseCase;
     private final FindStoreUseCase findStoreUseCase;
     private final StoreApiMapper storeApiMapper;
+
     @Override
-    public ResponseEntity<GenericResponse> getStore(Pageable pageable) {
+    @Cacheable(value = "stores")
+    public GenericResponse getStore(Pageable pageable) {
         Page<StoreResponse>page=findStoreUseCase.findAllStores(pageable)
                 .map(storeApiMapper::toResponse);
         GenericResponse genericResponse=GenericResponse.success();
         genericResponse.setData(page.getContent());
         genericResponse.setPage(storeApiMapper.toPageResponse(page));
-        return ResponseEntity.ok(genericResponse);
+        return genericResponse;
     }
 
     @Override
-    public ResponseEntity<GenericResponse> getStoreById(Long id) {
+    @Cacheable(value = "stores", key = "#id")
+
+    public GenericResponse getStoreById(Long id) {
         StoreResponse storeResponse=storeApiMapper.toResponse(findStoreUseCase.findStoreById(id));
         GenericResponse genericResponse=GenericResponse.success();
         genericResponse.setData(storeResponse);
-        return ResponseEntity.ok(genericResponse);
+        return genericResponse;
     }
 
     @Override
-    public ResponseEntity<GenericResponse> createStore(StoreRequest storeRequest) {
+    public GenericResponse createStore(StoreRequest storeRequest) {
         saveStoreUseCase.saveStore(storeApiMapper.toModel(storeRequest));
-        GenericResponse genericResponse=GenericResponse.success();
-        return ResponseEntity.ok(genericResponse);
+        return GenericResponse.success();
     }
 
     @Override
-    public ResponseEntity<GenericResponse> updateStore(StoreRequest storeRequest) {
+    public GenericResponse updateStore(StoreRequest storeRequest) {
         saveStoreUseCase.updateStore(storeApiMapper.toModel(storeRequest));
-        GenericResponse genericResponse=GenericResponse.success();
-        return ResponseEntity.ok(genericResponse);
+        return GenericResponse.success();
     }
 }
