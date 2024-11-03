@@ -8,6 +8,7 @@ import com.local.ms_store.infrastructure.adapter.in.rest.controller.request.Stor
 import com.local.ms_store.infrastructure.adapter.in.rest.controller.response.GenericResponse;
 import com.local.ms_store.infrastructure.adapter.in.rest.controller.response.StoreResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -45,6 +46,7 @@ public class StoreController  implements StoreApiPort {
     }
 
     @Override
+    @CacheEvict(value = "stores", allEntries = true)
     public GenericResponse createStore(StoreRequest storeRequest) {
         saveStoreUseCase.saveStore(storeApiMapper.toModel(storeRequest));
         return GenericResponse.success();
